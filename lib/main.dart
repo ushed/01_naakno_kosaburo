@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'todohuken.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
 class WeatherScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    //画面の横幅取得
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -40,32 +42,43 @@ class WeatherScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10.0),
               ),
               child: SingleChildScrollView(
+                //スクロールできるやつでラッピング
                 child: Text(
-                  '今日の天気' * 80,
                   style: TextStyle(fontSize: 16),
+                  '今日の天気' * 80,
                 ),
               ),
             ),
             SizedBox(height: 16), // ボタンとContainerの間のスペース
             ElevatedButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: Text('都道府県を選択'),
-                      content: Text('都道府県選択画面'),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text('閉じる'),
-                        ),
-                      ],
-                    );
-                  },
+              onPressed: () async {
+                // 都道府県選択画面に遷移
+                final selectedTodohuken = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => TodohukenListScreen()),
                 );
+
+                if (selectedTodohuken != null) {
+                  // 選択された都道府県を表示
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text('選択された都道府県'),
+                        content: Text(selectedTodohuken),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text('閉じる'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
               },
               child: Text('都道府県を選択'),
             ),
