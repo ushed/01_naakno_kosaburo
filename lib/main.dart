@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'prefectures_list_page.dart';
+import '../service/weather_api_service.dart';
+import '../model/wether_response.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,11 +21,14 @@ class MyApp extends StatelessWidget {
 
 class WeatherScreen extends StatefulWidget {
   @override
-  _WeatherScreenState createState() => _WeatherScreenState();
+  State<WeatherScreen> createState() => _WeatherScreenState();
 }
 
 class _WeatherScreenState extends State<WeatherScreen> {
-  String? _selectPrefecture; // 選択した都道府県を保存する変数
+  String? _selectedPrefectureCode;
+  String? _selectedPrefectureName; // 都道府県名を保持する変数
+  WeatherResponse? _weatherData;
+  final WeatherApiService _weatherApiService = WeatherApiService();
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +38,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('今日の天気'),
+        title: Text('今日の天気'),
       ),
       body: Center(
         child: Column(
@@ -49,16 +54,36 @@ class _WeatherScreenState extends State<WeatherScreen> {
                 borderRadius: BorderRadius.circular(10.0),
               ),
               child: SingleChildScrollView(
-                child: Text(
-                  '今日の天気' * 80,
-                  style: TextStyle(fontSize: 16),
-                ),
+                child: _selectedPrefectureCode == null
+                    ? // 都道府県が選択されていない場合
+                    Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          '都道府県を選択してください',
+                          style: TextStyle(fontSize: 16, color: Colors.black),
+                        ),
+                      )
+                    : _weatherData != null
+                        ? Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // "text" のみを表示
+                                Text(
+                                  _weatherData!.text,
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container(), // 天気情報がない場合
               ),
             ),
-            const SizedBox(height: 16), // ボタンとContainerの間のスペース
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () async {
-                // 都道府県選択画面に遷移し、選択結果を取得
+                // 都道府県選択画面へ遷移し、選択した都道府県コードと名前を受け取る
                 final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -66,17 +91,28 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   ),
                 );
 
-                // 選択結果が null でない場合に状態を更新
                 if (result != null) {
                   setState(() {
-                    _selectPrefecture = result;
+                    _selectedPrefectureCode = result['code'];
+                    _selectedPrefectureName = result['name']; // 都道府県名を保存
                   });
+
+                  // 選択した都道府県の天気データを取得
+                  try {
+                    final weatherData =
+                        await _weatherApiService.getWeather(result['code']);
+                    setState(() {
+                      _weatherData = weatherData;
+                    });
+                  } catch (e) {
+                    print(e); // エラーハンドリング
+                  }
                 }
               },
               child: Text(
-                _selectPrefecture == null
+                _selectedPrefectureCode == null
                     ? '都道府県を選択'
-                    : '$_selectPrefecture を選択',
+                    : '$_selectedPrefectureName の天気を取得', // nameを表示
               ),
             ),
           ],
