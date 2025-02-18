@@ -54,31 +54,30 @@ class _WeatherScreenState extends State<WeatherScreen> {
                 borderRadius: BorderRadius.circular(10.0),
               ),
               child: SingleChildScrollView(
-                // 天気情報が取得されていれば表示
-                child: _weatherData != null
-                    ? Padding(
+                child: _selectedPrefectureCode == null
+                    ? // 都道府県が選択されていない場合
+                    Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              _weatherData!.targetArea,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            SingleChildScrollView(
-                              child: Text(
-                                _weatherData!.text,
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ),
-                          ],
+                        child: Text(
+                          '都道府県を選択してください',
+                          style: TextStyle(fontSize: 16, color: Colors.black),
                         ),
                       )
-                    : Container(), // 天気情報がない場合
+                    : _weatherData != null
+                        ? Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // "text" のみを表示
+                                Text(
+                                  _weatherData!.text,
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container(), // 天気情報がない場合
               ),
             ),
             const SizedBox(height: 16),
