@@ -1,4 +1,5 @@
- const String jsonStringPrefecture = '''
+//prefectures
+const String jsonStringPrefecture = '''
 {
     "prefecturesCode": {
         "015000": "北海道",

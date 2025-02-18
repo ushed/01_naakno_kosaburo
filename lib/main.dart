@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'todohuken.dart';
+import 'prefectures_list_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,16 +17,23 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class WeatherScreen extends StatelessWidget {
+class WeatherScreen extends StatefulWidget {
+  @override
+  _WeatherScreenState createState() => _WeatherScreenState();
+}
+
+class _WeatherScreenState extends State<WeatherScreen> {
+  String? _selectPrefecture; // 選択した都道府県を保存する変数
+
   @override
   Widget build(BuildContext context) {
-    //画面の横幅取得
+    // 画面の横幅・高さを取得
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('今日の天気'),
+        title: const Text('今日の天気'),
       ),
       body: Center(
         child: Column(
@@ -35,52 +42,42 @@ class WeatherScreen extends StatelessWidget {
             Container(
               width: screenWidth * 0.8,
               height: screenHeight * 0.5,
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
                 border:
                     Border.all(color: const Color.fromARGB(255, 31, 194, 253)),
                 borderRadius: BorderRadius.circular(10.0),
               ),
               child: SingleChildScrollView(
-                //スクロールできるやつでラッピング
                 child: Text(
-                  style: TextStyle(fontSize: 16),
                   '今日の天気' * 80,
+                  style: TextStyle(fontSize: 16),
                 ),
               ),
             ),
-            SizedBox(height: 16), // ボタンとContainerの間のスペース
+            const SizedBox(height: 16), // ボタンとContainerの間のスペース
             ElevatedButton(
               onPressed: () async {
-                // 都道府県選択画面に遷移
-                final selectedTodohuken = await Navigator.push(
+                // 都道府県選択画面に遷移し、選択結果を取得
+                final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => TodohukenListScreen()),
+                    builder: (context) => PrefecturesListPage(),
+                  ),
                 );
 
-                if (selectedTodohuken != null) {
-                  // 選択された都道府県を表示
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text('選択された都道府県'),
-                        content: Text(selectedTodohuken),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text('閉じる'),
-                          ),
-                        ],
-                      );
-                    },
-                  );
+                // 選択結果が null でない場合に状態を更新
+                if (result != null) {
+                  setState(() {
+                    _selectPrefecture = result;
+                  });
                 }
               },
-              child: Text('都道府県を選択'),
+              child: Text(
+                _selectPrefecture == null
+                    ? '都道府県を選択'
+                    : '$_selectPrefecture を選択',
+              ),
             ),
           ],
         ),
