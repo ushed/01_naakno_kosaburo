@@ -24,14 +24,15 @@ class _PrefecturesListPage extends State<PrefecturesListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('都道府県'),
+        title: const Text('都道府県を選択'),
       ),
       body: ListView(
         children: prefecturesMap.entries.map((entry) {
           return ListTile(
             title: Text(entry.value), // 都道府県名
             onTap: () {
-              Navigator.pop(context, entry.value); // 選択した都道府県を返す
+              // 都道府県コード（key）と都道府県名（value）をMapとして返す
+              Navigator.pop(context, {'code': entry.key, 'name': entry.value});
             },
           );
         }).toList(),
