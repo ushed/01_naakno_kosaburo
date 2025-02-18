@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "27169477102",
+    "project_id": "wetherapp-6bb69",
+    "storage_bucket": "wetherapp-6bb69.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:27169477102:android:cd165aa89d280c7e253eff",
+        "android_client_info": {
+          "package_name": "com.example.test_dig"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGbQxhoev9ejNptnBI2Zb0tikj2Kl6Zyo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
