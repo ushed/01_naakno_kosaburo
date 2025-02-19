@@ -4,7 +4,7 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 
 // import './screens/home_screen.dart';
-import './screens/home_page.dart';
+import './root_page.dart';
 
 //home_screen.dart
 class AuthGate extends StatelessWidget {
@@ -53,7 +53,7 @@ class AuthGate extends StatelessWidget {
 
         // サインイン後はホーム画面を表示
         // return const HomeScreen();
-        return WeatherScreen();
+        return RootPage();
       },
     );
   }
