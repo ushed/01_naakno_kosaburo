@@ -29,7 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
       return;
     }
 
-    userDocId = user.uid; // UID を Firestore のドキュメントIDとして使用
+    userDocId = user.uid;
     print("ログインユーザーの UID: $userDocId");
 
     final doc = await FirebaseFirestore.instance

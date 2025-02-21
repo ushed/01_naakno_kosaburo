@@ -1,6 +1,6 @@
 //edit_profile_page
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart'; // ← FirebaseAuth をインポート
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -80,7 +80,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
                 final userDocRef = FirebaseFirestore.instance
                     .collection('users')
-                    .doc(user.uid); // Firestore のドキュメントIDを UID にする
+                    .doc(user.uid);
 
                 // Firestore にデータを更新
                 await userDocRef.set({
@@ -89,7 +89,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   'selfIntroText': _bioController.text,
                   'location': _locationController.text,
                   'updated_at': Timestamp.now(),
-                }, SetOptions(merge: true)); // 既存データを上書きせずマージ
+                }, SetOptions(merge: true));
 
                 Navigator.pop(context, true); // 編集が完了したら ProfilePage に戻る
               },
